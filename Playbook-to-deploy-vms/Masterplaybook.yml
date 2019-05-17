@@ -1,0 +1,5 @@
+---
+- import_playbook: DEVOPS.yml
+- import_playbook: DEV.yml
+- import_playbook: QASERVER.yml
+- import_playbook: PRODSERVER.yml

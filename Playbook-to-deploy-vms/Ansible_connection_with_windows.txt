@@ -1,0 +1,54 @@
+**********Installation of Ansible*********************
+
+1. Update repository
+ 	$ sudo apt-get update
+2. Install common software properties
+	$ sudo apt-get install software-properties-common
+3. Add Ansible in repository
+	$ sudo apt-add-repository ppa:ansible/ansible
+4. update repository
+	$ sudo apt-get update
+5. Install ansible
+	$ sudo apt-get install ansible
+6. check the version of Ansible
+	$ ansible --version
+
+******************CREATE CONNECTION WITH WINDOWS SERVER************************************************
+1. Run powershell command over the Windows server to install the winrm packages. (Command would be present on Internet)
+2. Install Pywinrm on Ansible control machine
+	$pip install pywinrm 
+if Pip is not installed then install the PIP with below command-
+	$sudo apt install python-pip 
+
+3. Setup your inventory file in ansible control machine
+	$ vi hosts
+
+	[win]
+	104.211.185.113
+
+	[win:vars]
+	ansible_user=ankit
+	ansible_password=Passw0rd$
+	ansible_connection=winrm
+	ansible_winrm_server_cert_validation=ignore
+
+	to save this hit 'esc' then :wq
+	to edit the file hit 'shift+o'
+
+4. test the connection with windows server
+	$ ansible win -i hosts -m win_ping          (win_ping is a module)
+
+5. create yml file
+	$ vi choco.yml
+	
+	---
+	- hosts : win
+	  gather_facts : no
+	  tasks :
+            - win_chocolatey:
+		 name : procexp
+		 state : present
+
+6. Run the playbook.
+	$ ansible-playbook -i hosts choco.yml
+	
