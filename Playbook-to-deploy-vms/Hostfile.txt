@@ -1,0 +1,31 @@
+sudo nano /etc/ansible/hosts
+[devops-servers]
+40.114.85.72
+[dev-server]
+13.68.219.112
+[prod-server]
+23.100.21.224
+[qa-server]
+13.90.99.234
+
+ssh-keygen
+/home/ankit.singh/.ssh/key-1
+/home/ankit.singh/.ssh/key-2
+/home/ankit.singh/.ssh/key-3
+/home/ankit.singh/.ssh/key-4
+ssh-copy-id -i <host ip>
+ansible -m ping <host group name>
+
+sudo apt-get install -y unzip
+sudo apt-get install -y zip
+
+ansible-galaxy install geerlingguy.sonar
+ansible-galaxy install geerlingguy.jenkins
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt-get update
+sudo apt-get install ansible
+ansible --version
+sudo apt install python-pip
+pip install pywinrm

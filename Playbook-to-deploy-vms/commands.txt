@@ -1,0 +1,32 @@
+az vm image list --output table
+az account list --output table
+az account set --subscription "My Demos"
+
+ssh-keygen
+/etc/ansible/hosts
+
+ssh-copy-id -i <host ip>
+ansible -m ping <host group name>
+
+sudo apt-get install python3-pip
+
+
+sudo lsof -i -P -n | grep LISTEN
+
+
+sudo usermod -a -G docker $USER
+$ groups
+uli sudo www-data lxd docker # Check if docker appears here!
+
+
+df -h
+top
+	
+sudo -i
+sudo update-alternatives --config java
+
+
+
+sudo systemctl start postgresql
+
+
