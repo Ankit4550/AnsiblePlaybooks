@@ -1,0 +1,44 @@
+node{
+    stage('scm checkout'){
+        git credentialsId: 'e4fcc0db-8da7-463c-8ce5-86d2be0b275c', url: 'https://github.com/Ankit4550/my-app.git'
+    }
+    stage('Maven Build'){
+        sh label: '', script: 'mvn clean package'
+    }
+    //stage('SonarQube'){
+          
+    //}
+    stage('archive'){
+        parallel(
+          "Junit": {
+            junit 'target/surefire-reports/*.xml'
+            
+          },
+          "Archive": {
+            archiveArtifacts(artifacts: 'target/myweb-0.0.5.war', onlyIfSuccessful: true, fingerprint: true)
+          }
+        )
+    }
+    stage('Build Docker Image'){
+     sh label: '', script: 'sudo docker build -t ankit4550/my-app:2.0.0 .'
+   }
+    stage('Push Docker Image'){
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
+        sh label: '', script: 'sudo docker login -u ankit4550 -p ${dockerHubPwd}'
+      }
+      sh label: '', script: 'sudo docker push ankit4550/my-app:2.0.0'
+        
+    }
+    stage('Run Container on Dev Server'){
+       //def dockerRun = 'sudo docker run -p 8080:8080 -d --name my-app ankit4550/my-app:2.0.0'
+        // sshagent(['dev-server']) {
+        // sh label: '', script: 'ssh -tt -o StrictHostKeyChecking=no ankit.singh@40.114.31.26 ${dockerRun}'
+         //}
+         sh label: '', script: 'sudo docker container run -d -p 8085:8080 --name app ankit4550/my-app:2.0.0'
+    }
+    stage('Email Notification'){
+        emailext body: '''Hi,
+
+         This is my first pipeline''', subject: 'My Jenkins', to: 'ankit.singh@globant.com'
+    }
+}
