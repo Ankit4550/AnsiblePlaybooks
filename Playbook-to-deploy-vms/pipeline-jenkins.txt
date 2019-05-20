@@ -23,16 +23,16 @@ node{
         )
     }
     stage('Build Docker Image'){
-     sh label: '', script: 'sudo docker build -t ankit4550/my-app:2.0.0 .'
+     sh label: '', script: 'sudo docker build -t ankit4550/my-app:${BUILD_NUMBER} .'
    }
    stage('Push Docker Image'){
       withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerhub')]) {
       sh label: '', script: 'sudo docker login -u ankit4550 -p ${dockerhub}'
       } 
-      sh label: '', script: 'sudo docker push ankit4550/my-app:2.0.0' 
+      sh label: '', script: 'sudo docker push ankit4550/my-app:${BUILD_NUMBER}' 
     }
     stage('Run Container on Dev Server'){
-        def dockerRun = 'sudo docker run -p 8085:8080 -d --name my-app ankit4550/my-app:2.0.0'
+        def dockerRun = 'sudo docker run -p ${BUILD_NUMBER}:8080 -d --name my-app${BUILD_NUMBER} ankit4550/my-app:${BUILD_NUMBER}'
         sshagent(['dev-server']) {
        sh "ssh -o StrictHostKeyChecking=no ankit@40.121.109.165 ${dockerRun}"
      }
